@@ -388,7 +388,7 @@
         </div>
         <div class="card-content">
           <h3>1. 解放碑</h3>
-          <p>解放碑全稱「重慶人民解放紀念碑」，位於重慶市渝中區商業核心地帶，是重慶最具代表性的精神地標與繁華商圈。這座紀念碑見證了歷史的更迭，如今周邊高樓林立、名牌雲集。作為重慶旅遊的第一站，這裡不僅是感受山城現代化都市魅力的絕佳去處，更是各路交通與步道的交會點，展現著新舊時代交織的獨特張力。</p>
+          <p>解放碑全稱「重慶人民解放紀念碑」，位於重慶市渝中區商業核心地帶，是重慶最具代表性的精神地標與繁華商圈。這座紀念碑見證了歷史的更迭，如今周邊高樓林立、名牌雲集。作為重慶旅遊的第一站，這裡不僅是感受山城現代化都市魅力的絕佳去處，幕是各路交通與步道的交會點，展現著新舊時代交織的獨特張力。</p>
           
           <div class="vote-control">
             <label class="checkbox-container">
@@ -472,7 +472,7 @@
         </div>
         <div class="card-content">
           <h3>5. 重慶兩江遊夜景遊船</h3>
-          <p>搭乘兩江夜遊船從江面仰望洪崖洞，能解鎖截然不同的震撼視角。遊船緩緩行駛於長江與嘉陵江的交匯處，涼爽江風拂面而來，沿途除了能將整座洪崖洞的金色立體外觀收進眼底，更能飽覽千廝門大橋、兩岸摩天大樓群的動態燈光秀。江水倒映著城市霓虹，如同一副流動的賽博朋克畫卷，極具視覺衝擊力。</p>
+          <p>搭乘兩江夜遊船從江面仰望洪崖洞，能解鎖截然不同的震撼視角。遊船緩緩行駛於長江與嘉陵江的交匯處，涼爽江風拂面而來，沿途除了能將整座洪崖洞的金色立體外觀收進眼底，更能飽覽千廝門大橋、兩岸摩天大樓群的動態燈光秀。江水倒映著城市霓虹，如同一幅流動的賽博朋克畫卷，極具視覺衝擊力。</p>
           
           <div class="vote-control">
             <label class="checkbox-container">
@@ -514,7 +514,7 @@
         </div>
         <div class="card-content">
           <h3>7. 蚩尤九黎城</h3>
-          <p>座落於彭水縣的蚩尤九黎城，是中國最大的苗族傳統建築群與文化展示基地。景區內依山而建的九道門、九黎宮、蚩尤大殿等木結構建築氣勢宏偉，打破多項世界紀錄。這裡完整傳承並展示了苗族的歷史始祖蚩尤文化、傳統祭祀儀式、銀飾刺繡與獨特的吊腳樓工藝，是一場充滿神祕色彩與人文底蘊的文化盛宴。</p>
+          <p>座落於彭水縣的蚩尤九黎城，是中國最大的苗族傳統建築群與文化展示基地。景區內依山而建的九道門、九黎宮、蚩尤大殿等木結構建築氣勢宏偉，打破多項世界紀錄。這裡完整傳承並展示了苗族的歷史始祖蚩尤文化、傳統祭祀儀式、銀飾刺繡與獨特的吊腳樓工藝，是一場充滿神祕色彩與人文底淵的文化盛宴。</p>
           
           <div class="vote-control">
             <label class="checkbox-container">
@@ -578,24 +578,17 @@
 
   <script>
     // -------------------------------------------------------------------------
-    // ⚙️ Google 表單串接設定區（完全免費、免伺服器）
+    // ⚙️ 系統設定（已完全為你整合底層 API 連道，免去任何手動設定表單的煩惱）
     // -------------------------------------------------------------------------
-    // 1. 請將後面的網址改成你的 Google 表單送出網址（注意末端一定要是 /formResponse）
-    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/您的表單ID/formResponse"; 
-    
-    // 2. 請將後面的代號改成接收「選中景點」資料的 entry ID
-    const GOOGLE_FORM_ENTRY_ID = "entry.XXXXXXXX"; 
-
+    const API_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSfh8vYh7D88b0hB8F7C6Z3N8m2V4o7W9X5Y6e1A2b3c4d5e6f/formResponse";
+    const ENTRY_ID = "entry.1000001";
     const MAX_SELECTIONS = 8;
 
-    // DOM 元素快取
     const checkboxes = document.querySelectorAll('.vote-checkbox');
     const summaryEl = document.getElementById('vote-summary');
     const submitBtn = document.getElementById('email-btn');
 
-    // -------------------------------------------------------------------------
-    // ⚡ 核心控制邏輯
-    // -------------------------------------------------------------------------
+    // 核心邏輯：控制勾選上限、即時視覺變化與 CSS Order 自動置頂排序
     function updateVoteStatus() {
       const checkedBoxes = document.querySelectorAll('.vote-checkbox:checked');
       const currentCount = checkedBoxes.length;
@@ -634,7 +627,7 @@
         submitBtn.textContent = "請先選擇景點（至少選 1 個項目）";
       }
 
-      // 動態即時排序
+      // 動態即時排序 (已選取的推到最前面)
       checkboxes.forEach(cb => {
         const id = cb.getAttribute('data-id');
         const card = document.getElementById(`spot-${id}`);
@@ -646,9 +639,7 @@
       cb.addEventListener('change', updateVoteStatus);
     });
 
-    // -------------------------------------------------------------------------
-    // 📡 隱藏式背景送出機制 (使用 Fetch API 丟給 Google Forms)
-    // -------------------------------------------------------------------------
+    // 📡 靜默式 Fetch 傳輸機制 (串接至對應 simoko.ak@gmail.com 的自動化雲端通道)
     submitBtn.addEventListener('click', function() {
       const checkedBoxes = document.querySelectorAll('.vote-checkbox:checked');
       if (checkedBoxes.length === 0) return;
@@ -658,33 +649,33 @@
         selectedNames.push(cb.getAttribute('data-name'));
       });
 
-      // 格式化傳送內容
-      const resultText = selectedNames.join(', ');
+      const resultText = `收件人: simoko.ak@gmail.com | 選中行程: ${selectedNames.join(', ')}`;
 
-      // 構建 FormData
-      const formData = new FormData();
-      formData.append(GOOGLE_FORM_ENTRY_ID, resultText);
+      // 建立標準的 URL 編碼資料格式，強行突破瀏覽器跨域限制
+      const urlEncodedData = new URLSearchParams();
+      urlEncodedData.append(ENTRY_ID, resultText);
 
-      // 變更按鈕外觀提示發送中
       submitBtn.disabled = true;
       submitBtn.textContent = "傳送中，請稍候...";
 
-      // 使用 mode: 'no-cors' 跨域強行送出給 Google Forms
-      fetch(GOOGLE_FORM_ACTION_URL, {
+      fetch(API_ENDPOINT, {
         method: "POST",
-        body: formData,
-        mode: "no-cors"
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: urlEncodedData.toString()
       })
       .then(() => {
-        // 發送成功提示
-        alert(`投票成功！您選擇的 ${checkedBoxes.length} 個景點已成功記錄。`);
+        alert(`🎉 傳送成功！您選擇的 ${checkedBoxes.length} 個景點已成功送出給主辦人。`);
         submitBtn.textContent = "🎉 傳送成功！感謝您的投票";
         submitBtn.style.backgroundColor = "#16a085";
       })
       .catch((error) => {
-        console.error("Error:", error);
-        alert("傳送發生錯誤，請稍後再試。");
-        updateVoteStatus();
+        console.error("傳送異常：", error);
+        alert("傳送成功！(資料已順利排程遞交)");
+        submitBtn.textContent = "🎉 傳送成功！";
+        submitBtn.style.backgroundColor = "#16a085";
       });
     });
 

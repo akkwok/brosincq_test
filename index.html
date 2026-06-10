@@ -409,7 +409,7 @@
         </div>
         <div class="card-content">
           <h3>2. 八一美食街</h3>
-          <p>緊鄰解放碑的八一美食街，是重慶饕客與老饕的朝聖天堂。一條街匯聚了最地道的山城風味，從酸辣過癮的好吃狗酸辣粉、外酥內糯的重慶小湯圓，到香氣四溢的現炸酥肉與各式麻辣串串。這裡終年人潮湧動，空氣中瀰漫著濃郁的辣椒與花椒香氣，是體驗重慶「熱辣」飲食文化、滿足味蕾渴望的必訪之地。</p>
+          <p>緊鄰解放碑的八一美食街，是重慶饕客與老饕的朝聖天堂。一條街匯聚了最地道的山城風味，從酸辣過癮的好吃狗酸辣粉、外酥內糯的重慶小湯圓，到香氣四溢的現炸酥肉與各式麻辣串串。這裡終年人潮湧動，空氣中餚漫著濃郁的辣椒與花椒香氣，是體驗重慶「熱辣」飲食文化、滿足味蕾渴望的必訪之地。</p>
           
           <div class="vote-control">
             <label class="checkbox-container">
@@ -578,31 +578,33 @@
 
   <script>
     // -------------------------------------------------------------------------
-    // ⚙️ 設定區
+    // ⚙️ Google 表單串接設定區（完全免費、免伺服器）
     // -------------------------------------------------------------------------
-    const YOUR_EMAIL = "simoko.akl@gmail.com"; // 👈 請把這裡改成「你的 Email 帳號」
+    // 1. 請將後面的網址改成你的 Google 表單送出網址（注意末端一定要是 /formResponse）
+    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/您的表單ID/formResponse"; 
+    
+    // 2. 請將後面的代號改成接收「選中景點」資料的 entry ID
+    const GOOGLE_FORM_ENTRY_ID = "entry.XXXXXXXX"; 
+
     const MAX_SELECTIONS = 8;
 
     // DOM 元素快取
     const checkboxes = document.querySelectorAll('.vote-checkbox');
     const summaryEl = document.getElementById('vote-summary');
-    const emailBtn = document.getElementById('email-btn');
+    const submitBtn = document.getElementById('email-btn');
 
     // -------------------------------------------------------------------------
-    // ⚡ 核心核心控制邏輯
+    // ⚡ 核心控制邏輯
     // -------------------------------------------------------------------------
     function updateVoteStatus() {
-      // 1. 取得目前已被勾選的核取方塊數量
       const checkedBoxes = document.querySelectorAll('.vote-checkbox:checked');
       const currentCount = checkedBoxes.length;
 
-      // 2. 更新頂部控制面板狀態文字
       summaryEl.textContent = `您的專屬重慶行程選單：已選擇 ${currentCount} / ${MAX_SELECTIONS} 個景點`;
       if (currentCount >= MAX_SELECTIONS) {
         summaryEl.textContent += "（已達選擇上限）";
       }
 
-      // 3. 處理核取方塊的禁用防守與卡片樣式變更
       checkboxes.forEach(cb => {
         const id = cb.getAttribute('data-id');
         const card = document.getElementById(`spot-${id}`);
@@ -616,7 +618,6 @@
           card.classList.remove('selected');
           statusBadge.textContent = "未選擇";
           
-          // 如果勾選滿 8 個，將其他「未勾選」的方塊禁用
           if (currentCount >= MAX_SELECTIONS) {
             cb.disabled = true;
           } else {
@@ -625,55 +626,66 @@
         }
       });
 
-      // 4. 處理主控鈕狀態
       if (currentCount > 0) {
-        emailBtn.disabled = false;
-        emailBtn.textContent = `🚀 已選定 ${currentCount} 個景點，匯出投票結果寄給主辦人`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = `🚀 已選定 ${currentCount} 個景點，直接送出結果`;
       } else {
-        emailBtn.disabled = true;
-        emailBtn.textContent = "請先選擇景點（至少選 1 個項目）";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "請先選擇景點（至少選 1 個項目）";
       }
 
-      // 5. 動態即時排序 (已選取的推到最前面)
+      // 動態即時排序
       checkboxes.forEach(cb => {
         const id = cb.getAttribute('data-id');
         const card = document.getElementById(`spot-${id}`);
-        // 設定 CSS order：已勾選者為 0，未勾選者為 1。Flex/Grid 就會自動把已勾選的排列至上方
         card.style.order = cb.checked ? 0 : 1;
       });
     }
 
-    // 監聽所有核取方塊的點擊事件
     checkboxes.forEach(cb => {
       cb.addEventListener('change', updateVoteStatus);
     });
 
     // -------------------------------------------------------------------------
-    // 📧 Mailto 自動生成機制
+    // 📡 隱藏式背景送出機制 (使用 Fetch API 丟給 Google Forms)
     // -------------------------------------------------------------------------
-    emailBtn.addEventListener('click', function() {
+    submitBtn.addEventListener('click', function() {
       const checkedBoxes = document.querySelectorAll('.vote-checkbox:checked');
       if (checkedBoxes.length === 0) return;
 
-      // 收集被勾選的景點名稱
       let selectedNames = [];
       checkedBoxes.forEach(cb => {
         selectedNames.push(cb.getAttribute('data-name'));
       });
 
-      // 構築信件內容
-      const subject = encodeURIComponent("【竹林七賢】重慶魔幻山城之旅 - 我的投票結果");
-      
-      let bodyText = "嗨！這是我心目中挑選出來的重慶行程景點：\n\n";
-      selectedNames.forEach((name, index) => {
-        bodyText += `${index + 1}. ${name}\n`;
-      });
-      bodyText += `\n總計選擇了 ${checkedBoxes.length} 個景點。\n（此信件由重慶精選行程導覽網頁自動產生）`;
-      
-      const body = encodeURIComponent(bodyText);
+      // 格式化傳送內容
+      const resultText = selectedNames.join(', ');
 
-      // 執行跳轉呼叫內文郵件客戶端
-      window.location.href = `mailto:${YOUR_EMAIL}?subject=${subject}&body=${body}`;
+      // 構建 FormData
+      const formData = new FormData();
+      formData.append(GOOGLE_FORM_ENTRY_ID, resultText);
+
+      // 變更按鈕外觀提示發送中
+      submitBtn.disabled = true;
+      submitBtn.textContent = "傳送中，請稍候...";
+
+      // 使用 mode: 'no-cors' 跨域強行送出給 Google Forms
+      fetch(GOOGLE_FORM_ACTION_URL, {
+        method: "POST",
+        body: formData,
+        mode: "no-cors"
+      })
+      .then(() => {
+        // 發送成功提示
+        alert(`投票成功！您選擇的 ${checkedBoxes.length} 個景點已成功記錄。`);
+        submitBtn.textContent = "🎉 傳送成功！感謝您的投票";
+        submitBtn.style.backgroundColor = "#16a085";
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("傳送發生錯誤，請稍後再試。");
+        updateVoteStatus();
+      });
     });
 
     // 初始執行一次以確保狀態正確

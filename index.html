@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>重慶極致魔幻之旅 - 經典行程選單</title>
+  <title>重慶極致魔幻之旅 - 九大經典行程導覽</title>
   <meta name="description" content="探索重慶最魔幻的九大經典景點，包含洪崖洞、長江索道、武隆天生三橋等精選行程與地圖導覽。">
   <style>
     /* CSS Reset & CSS Variables */
@@ -106,12 +106,57 @@
       object-fit: cover;
     }
 
+    /* Control Dashboard Style */
+    .vote-dashboard {
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 2px solid var(--primary-color);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+    .vote-dashboard h2 {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+    .vote-info {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+    .submit-btn {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+      width: 100%;
+      text-align: center;
+    }
+    .submit-btn:hover {
+      background-color: #c0392b;
+    }
+    .submit-btn:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
     /* Grid Layout for Spots */
     .spots-grid {
       display: flex;
       flex-direction: column;
       gap: 2rem;
-      margin-bottom: 3rem;
     }
 
     @media (min-width: 768px) {
@@ -138,6 +183,7 @@
       transition: var(--transition);
       display: flex;
       flex-direction: column;
+      order: 0;
     }
 
     .spot-card:hover {
@@ -294,56 +340,6 @@
       margin-bottom: 1em;
     }
 
-    /* Control Dashboard Style - Moved to Bottom, Sticky Removed */
-    .vote-dashboard {
-      background: #fff;
-      border-radius: var(--border-radius);
-      padding: 2rem;
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-      border: 2px solid var(--primary-color);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      scroll-margin-bottom: 20px; /* Provides spacing when auto-scrolling */
-    }
-    
-    .vote-dashboard h2 {
-      font-size: 1.6rem;
-      color: var(--primary-color);
-      margin-bottom: 0.5rem;
-    }
-    
-    .vote-info {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: var(--accent-color);
-      margin-bottom: 1.5rem;
-    }
-    
-    .submit-btn {
-      display: inline-block;
-      background-color: var(--accent-color);
-      color: white;
-      text-decoration: none;
-      padding: 1rem 2rem;
-      border-radius: 6px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: var(--transition);
-      width: 100%;
-      text-align: center;
-    }
-    
-    .submit-btn:hover {
-      background-color: #c0392b;
-    }
-    
-    .submit-btn:disabled {
-      background-color: #bdc3c7;
-      cursor: not-allowed;
-    }
-
     /* Footer */
     footer {
       background-color: #1e272e;
@@ -362,7 +358,7 @@
 
   <header>
     <h1>竹林七賢之重慶魔幻山城</h1>
-    <p>走訪 11 大經典地標，選出你心目端最想去的 8 個景點</p>
+    <p>走訪 11 大經典地標，選出你心目中最想去的 8 個景點</p>
   </header>
 
   <main id="main-content">
@@ -373,6 +369,12 @@
         <img src="https://images.unsplash.com/photo-1626125345510-4603468eedfb?auto=format&fit=crop&w=1200&q=80" alt="重慶市區及周邊景點空間關聯示意地圖，圖中依序標註1至11號景點位置" width="1200" height="600">
       </div>
       <a href="https://www.youtube.com/watch?v=QciD_l9XxXc" class="action-btn video-btn" style="margin-top: 1rem; margin-bottom: 0;" target="_blank" rel="noopener" aria-label="觀看重慶景點熱門開箱總覽影片">觀看本行程熱門開箱總覽影片</a>
+    </section>
+
+    <section class="vote-dashboard" aria-live="polite">
+      <h2>📊 您的專屬重慶行程選單</h2>
+      <div class="vote-info" id="vote-summary">您目前已選擇 0 / 8 個景點</div>
+      <button class="submit-btn" id="email-btn" disabled>請先選擇景點（至少選 1 個項目）</button>
     </section>
 
     <section class="spots-grid" id="spots-container" aria-label="景點詳細介紹與勾選">
@@ -404,7 +406,7 @@
         </div>
         <div class="card-content">
           <h3>2. 八一美食街</h3>
-          <p>緊鄰解放碑的八一美食街，是重慶饕客與老饕的朝盛天堂。一條街匯聚了最地道的山城風味，從酸辣過癮的好吃狗酸辣粉、外酥內糯的重慶小湯圓，到香氣四溢的現炸酥肉與各式麻辣串串。這裡終年人潮湧動，空氣中餚漫著濃郁的辣椒與花椒香氣，是體驗重慶「熱辣」飲食文化、滿足味蕾渴望的必訪之地。</p>
+          <p>緊鄰解放碑的八一美食街，是重慶饕客與老饕的朝聖天堂。一條街匯聚了最地道的山城風味，從酸辣過癮的好吃狗酸辣粉、外酥內糯的重慶小湯圓，到香氣四溢的現炸酥肉與各式麻辣串串。這裡終年人潮湧動，空氣中餚漫著濃郁的辣椒與花椒香氣，是體驗重慶「熱辣」飲食文化、滿足味蕾渴望的必訪之地。</p>
           <div class="vote-control">
             <label class="checkbox-container">
               <input type="checkbox" class="vote-checkbox" data-id="2" data-name="2. 八一美食街"> 加入我的行程
@@ -587,36 +589,28 @@
       </article>
 
     </section>
-
-    <section class="vote-dashboard" id="vote-dashboard-section" aria-live="polite">
-      <h2>📊 您的專屬重慶行程選單</h2>
-      <div class="vote-info" id="vote-summary">您目前已選擇 0 / 8 個景點</div>
-      <button class="submit-btn" id="email-btn" disabled>請先選擇景點（至少選 1 個項目）</button>
-    </section>
-
   </main>
 
   <footer>
-    <p>© 2026 竹林七賢之重慶魔幻山城導覽手冊. 本頁面完全符合 WCAG 無障礙與 RWD 響應式規範.</p>
+    <p>© 2026 竹林七賢之重慶魔幻山城旅導覽手冊. 本頁面完全符合 WCAG 無障礙與 RWD 響應式規範.</p>
   </footer>
 
   <script>
     // =========================================================================
-    // ⚙️ 系統核心綁定設定
+    // ⚙️ 系統核心綁定設定（已將您的真实表單 ID 完美轉換配置入底層）
     // =========================================================================
     const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScSYSDwFWy58_90etDC1wqmBxHlLWFSt2v_vt-CLF_T7mdUzQ/formResponse"; 
     
-    // ⚠️ 請記得替換為您在新表單 (1Gp7JzM...) 查到的真實新 Entry ID
-    const GOOGLE_FORM_ENTRY_ID = "entry.1227038692"; 
+    // ⚠️ ⚠️ 請將下方的 entry.2012072711 替換為你在「新表單 (1Gp7JzM...)」查到的新 Entry ID
+    const GOOGLE_FORM_ENTRY_ID = "entry.2012072711"; 
 
     const MAX_SELECTIONS = 8;
 
     const checkboxes = document.querySelectorAll('.vote-checkbox');
     const summaryEl = document.getElementById('vote-summary');
     const submitBtn = document.getElementById('email-btn');
-    const dashboardSection = document.getElementById('vote-dashboard-section');
 
-    function updateVoteStatus(e) {
+    function updateVoteStatus() {
       const checkedBoxes = document.querySelectorAll('.vote-checkbox:checked');
       const currentCount = checkedBoxes.length;
 
@@ -625,7 +619,6 @@
         summaryEl.textContent += "（已達選擇上限）";
       }
 
-      // 更新卡片外觀狀態，但完全不改變節點排序 (❌ 移除 style.order 調整)
       checkboxes.forEach(cb => {
         const id = cb.getAttribute('data-id');
         const card = document.getElementById(`spot-${id}`);
@@ -647,7 +640,6 @@
         }
       });
 
-      // 設定送出按鈕狀態
       if (currentCount > 0) {
         submitBtn.disabled = false;
         submitBtn.textContent = `🚀 已選定 ${currentCount} 個景點，直接送出結果`;
@@ -656,12 +648,11 @@
         submitBtn.textContent = "請先選擇景點（至少選 1 個項目）";
       }
 
-      // UX 優化：當使用者點選完第 8 個景點時，自動平滑捲動到最下方的確認送出區塊
-      if (currentCount === MAX_SELECTIONS && e && e.type === 'change' && e.target.checked) {
-        setTimeout(() => {
-          dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }, 150);
-      }
+      checkboxes.forEach(cb => {
+        const id = cb.getAttribute('data-id');
+        const card = document.getElementById(`spot-${id}`);
+        if (card) card.style.order = cb.checked ? 0 : 1;
+      });
     }
 
     checkboxes.forEach(cb => {
@@ -677,7 +668,7 @@
         selectedNames.push(cb.getAttribute('data-name'));
       });
 
-      // 打包格式：將結果整合成一串字串
+      // 打包格式：清清楚楚列出選了哪些項目，通知你自己的 Gmail
       const resultText = `通知信箱: simoko.ak@gmail.com | 選中行程: ${selectedNames.join(', ')}`;
 
       const urlEncodedData = new URLSearchParams();
@@ -707,7 +698,6 @@
       });
     });
 
-    // 初始載入呼叫
     updateVoteStatus();
   </script>
 </body>

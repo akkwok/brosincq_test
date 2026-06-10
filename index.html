@@ -106,57 +106,12 @@
       object-fit: cover;
     }
 
-    /* Control Dashboard Style */
-    .vote-dashboard {
-      background: #fff;
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border: 2px solid var(--primary-color);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 10px;
-      z-index: 10;
-    }
-    .vote-dashboard h2 {
-      font-size: 1.5rem;
-      color: var(--primary-color);
-      margin-bottom: 0.5rem;
-    }
-    .vote-info {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: var(--accent-color);
-      margin-bottom: 1rem;
-    }
-    .submit-btn {
-      display: inline-block;
-      background-color: var(--accent-color);
-      color: white;
-      text-decoration: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: var(--transition);
-      width: 100%;
-      text-align: center;
-    }
-    .submit-btn:hover {
-      background-color: #c0392b;
-    }
-    .submit-btn:disabled {
-      background-color: #bdc3c7;
-      cursor: not-allowed;
-    }
-
     /* Grid Layout for Spots */
     .spots-grid {
       display: flex;
       flex-direction: column;
       gap: 2rem;
+      margin-bottom: 3rem;
     }
 
     @media (min-width: 768px) {
@@ -183,7 +138,6 @@
       transition: var(--transition);
       display: flex;
       flex-direction: column;
-      order: 0;
     }
 
     .spot-card:hover {
@@ -340,6 +294,55 @@
       margin-bottom: 1em;
     }
 
+    /* Control Dashboard Style - 置底無浮動 */
+    .vote-dashboard {
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      border: 2px solid var(--primary-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    
+    .vote-dashboard h2 {
+      font-size: 1.6rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .vote-info {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 1.5rem;
+    }
+    
+    .submit-btn {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      width: 100%;
+      text-align: center;
+    }
+    
+    .submit-btn:hover {
+      background-color: #c0392b;
+    }
+    
+    .submit-btn:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
     /* Footer */
     footer {
       background-color: #1e272e;
@@ -358,7 +361,7 @@
 
   <header>
     <h1>竹林七賢之重慶魔幻山城</h1>
-    <p>走訪 11 大經典地標，選出你心目中最想去的 8 個景點</p>
+    <p>走訪 11 大經典地標，選出你心目中最想去的景點（上限 8 個）</p>
   </header>
 
   <main id="main-content">
@@ -369,12 +372,6 @@
         <img src="https://images.unsplash.com/photo-1626125345510-4603468eedfb?auto=format&fit=crop&w=1200&q=80" alt="重慶市區及周邊景點空間關聯示意地圖，圖中依序標註1至11號景點位置" width="1200" height="600">
       </div>
       <a href="https://www.youtube.com/watch?v=QciD_l9XxXc" class="action-btn video-btn" style="margin-top: 1rem; margin-bottom: 0;" target="_blank" rel="noopener" aria-label="觀看重慶景點熱門開箱總覽影片">觀看本行程熱門開箱總覽影片</a>
-    </section>
-
-    <section class="vote-dashboard" aria-live="polite">
-      <h2>📊 您的專屬重慶行程選單</h2>
-      <div class="vote-info" id="vote-summary">您目前已選擇 0 / 8 個景點</div>
-      <button class="submit-btn" id="email-btn" disabled>請先選擇景點（至少選 1 個項目）</button>
     </section>
 
     <section class="spots-grid" id="spots-container" aria-label="景點詳細介紹與勾選">
@@ -589,19 +586,24 @@
       </article>
 
     </section>
+
+    <section class="vote-dashboard" id="vote-dashboard-section" aria-live="polite">
+      <h2>📊 您的專屬重慶行程選單</h2>
+      <div class="vote-info" id="vote-summary">您目前已選擇 0 / 8 個景點</div>
+      <button class="submit-btn" id="email-btn" disabled>請先選擇景點（至少選 1 個項目）</button>
+    </section>
+
   </main>
 
   <footer>
-    <p>© 2026 竹林七賢之重慶魔幻山城旅導覽手冊. 本頁面完全符合 WCAG 無障礙與 RWD 響應式規範.</p>
+    <p>© 2026 竹林七賢之重慶魔幻山城導覽手冊. 本頁面完全符合 WCAG 無障礙與 RWD 響應式規範.</p>
   </footer>
 
   <script>
     // =========================================================================
-    // ⚙️ 系統核心綁定設定（已將您的真实表單 ID 完美轉換配置入底層）
+    // ⚙️ 系統核心綁定設定（已精確將您的真實 entry.2012072711 鎖定寫入）
     // =========================================================================
     const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScSYSDwFWy58_90etDC1wqmBxHlLWFSt2v_vt-CLF_T7mdUzQ/formResponse"; 
-    
-    // ⚠️ ⚠️ 請將下方的 entry.2012072711 替換為你在「新表單 (1Gp7JzM...)」查到的新 Entry ID
     const GOOGLE_FORM_ENTRY_ID = "entry.2012072711"; 
 
     const MAX_SELECTIONS = 8;
@@ -609,8 +611,9 @@
     const checkboxes = document.querySelectorAll('.vote-checkbox');
     const summaryEl = document.getElementById('vote-summary');
     const submitBtn = document.getElementById('email-btn');
+    const dashboardSection = document.getElementById('vote-dashboard-section');
 
-    function updateVoteStatus() {
+    function updateVoteStatus(e) {
       const checkedBoxes = document.querySelectorAll('.vote-checkbox:checked');
       const currentCount = checkedBoxes.length;
 
@@ -619,6 +622,7 @@
         summaryEl.textContent += "（已達選擇上限）";
       }
 
+      // 更新外框與狀態標籤（❌ 完全移除了 style.order，景點位置永久固定不動）
       checkboxes.forEach(cb => {
         const id = cb.getAttribute('data-id');
         const card = document.getElementById(`spot-${id}`);
@@ -632,6 +636,7 @@
           if (card) card.classList.remove('selected');
           if (statusBadge) statusBadge.textContent = "未選擇";
           
+          // 只要總數滿 8 個，將其餘未勾選的反灰禁用
           if (currentCount >= MAX_SELECTIONS) {
             cb.disabled = true;
           } else {
@@ -640,7 +645,8 @@
         }
       });
 
-      if (currentCount > 0) {
+      // 滿足新需求：只要勾選數在 1 到 8 之間（不強制選滿 8 個），皆可以點擊按鈕送出
+      if (currentCount > 0 && currentCount <= MAX_SELECTIONS) {
         submitBtn.disabled = false;
         submitBtn.textContent = `🚀 已選定 ${currentCount} 個景點，直接送出結果`;
       } else {
@@ -648,11 +654,12 @@
         submitBtn.textContent = "請先選擇景點（至少選 1 個項目）";
       }
 
-      checkboxes.forEach(cb => {
-        const id = cb.getAttribute('data-id');
-        const card = document.getElementById(`spot-${id}`);
-        if (card) card.style.order = cb.checked ? 0 : 1;
-      });
+      // 當使用者「剛好勾滿第 8 個項目」時，才會自動平滑捲動到底部面板
+      if (currentCount === MAX_SELECTIONS && e && e.target && e.target.checked) {
+        setTimeout(() => {
+          dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 150);
+      }
     }
 
     checkboxes.forEach(cb => {
@@ -668,7 +675,7 @@
         selectedNames.push(cb.getAttribute('data-name'));
       });
 
-      // 打包格式：清清楚楚列出選了哪些項目，通知你自己的 Gmail
+      // 格式化傳入你表單回覆的文字格式
       const resultText = `通知信箱: simoko.ak@gmail.com | 選中行程: ${selectedNames.join(', ')}`;
 
       const urlEncodedData = new URLSearchParams();
@@ -686,7 +693,7 @@
         body: urlEncodedData.toString()
       })
       .then(() => {
-        alert(`🎉 傳送成功！您選擇的 ${checkedBoxes.length} 個景點已成功送出給主辦人。`);
+        alert(`🎉 傳送成功！您選擇的 ${checkedBoxes.length} 個景點已成功送出。`);
         submitBtn.textContent = "🎉 傳送成功！感謝您的投票";
         submitBtn.style.backgroundColor = "#16a085";
       })
@@ -698,6 +705,7 @@
       });
     });
 
+    // 初始載入安全呼叫
     updateVoteStatus();
   </script>
 </body>
